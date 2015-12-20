@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <style>
+        .bbb {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 5px solid red;
+        }
+    </style>
+    <title>111</title>
+    <link href="../css/markPage.css" rel="stylesheet" type="text/css">
+    <script src="../JavaScript/base.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="../JavaScript/markPage_jquery.js"></script>
+</head>
+<body>
+<div class="test">test<strong>22222</strong>0000</div>
+<div class="markPanel top">
+    <div class="arrow"></div>
+    <div class="markPanel-title">添加批注：<button class="subMark" onclick="test()">添加</button></div>
+    <div class="markPanel-content">
+        <div>
+            标注颜色：<input type="color" id="markColor" value="#ffffff">
+        </div>
+        <div>
+            <span style="vertical-align:top">批注内容：</span><textarea rows="5" cols="35" style="padding:5px;color:#666;resize:none" id="markContent"></textarea>
+        </div>
+    </div>
+</div>
+<div class="jiathis_style"
+     style="position: absolute; z-index: 1000000000; display: none; top: 50%; left: 50%; overflow: auto;"></div>
+<div class="jiathis_style" style="position: absolute; z-index: 1000000000; display: none; overflow: auto;"></div>
+<div id="documentPage">
+<div id="main">
+<div class="left">
+<h1 class="heading">
+    创建你的第一个JavaScript库
+</h1>
+
+<div class="docInfo">
+    <span class="source">来源：<a
+            href="http://blog.fynas.com/post/2012-10-16/%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AAJavaScript%E5%BA%93"
+            target="_blank" rel="nofollow">SuperApple</a></span> <span class="addTime">发布时间：2012-10-22</span> <span
+        class="clickTotal">阅读次数：<span id="spanClickTotal">4887</span></span>
+</div>
+<div class="body textStyle">
+<p>
+    　　是否曾对Mootools的魔力感到惊奇？是否有想知道Dojo如何做到那样的？是否对jQuery感到好奇？在这个教程中，我们将了解它们背后的东西并且动手创建一个超级简单的你最喜欢的库。</p>
+
+<p style="text-align: center">
+
+<p>
+    　　我们其乎每天都在使用JavaScript库。当你刚入门时，利用jQuery是一件非常奇妙的事，主要是因为它的DOM操作。首先，DOM对于入门者来说可能是相对困难的事情；其次用它我们几乎可以不用考虑跨浏览器兼容的问题。</p>
+
+<p>
+    　　在这个教程中，我们将试着从头开始实现一个很简单的库。是的，它非常有意思，但是在你高兴之前让我申明几点：</p>
+<ul>
+    <li>
+        <p>
+            这不会是全功能的库。我们有很多方法要写，但是它不是jQuery。我们将会做足工作来让你感受到在你创建一个库时会遇到的各种问题。</p>
+    </li>
+    <li>
+        <p>
+            我们不会完全解决所有浏览器的兼容性问题。我们写的代码能支持IE8+，Firefox 5+，Opera 10+，Chrome和Safari。</p>
+    </li>
+    <li>
+        <p>
+            我们不会覆盖使用我们库的所有可能性。比如我们的append和prepend方法只在你传入一个我们库的实例时才有效，它们不支持原生的DOM节点或节点集合。</p>
+    </li>
+</ul>
+<h2>
+    　步骤1: 创建库样板文件Creating the Library Boilerplate</h2>
+
+<p>
+    　　我们以一些封装代码开始，它将会包含我们整个库。它就是你经常用到的<a
+        href="http://benalman.com/news/2010/11/immediately-invoked-function-expression/" target="_blank">立即执行函数表达式</a>。
+</p>
+
+<div>
+    <div id="highlighter_100574" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">window.dome = (</code><code
+                                class="jscript keyword">function</code> <code class="jscript plain">() {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">function</code> <code class="jscript plain">Dome (els) {</code>
+                        </div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">dome = {</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">get: </code><code class="jscript keyword">function</code> <code
+                                class="jscript plain">(selector) {</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">dome;</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript plain">}());</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　如你所见，我们把我们的库叫Dome，因为它主要就是一个针对DOM的库，是的，它很不完整。</p>
+
+<p>
+    　　到此我们做了两件事。首先，我们定义了一个函数，它最终会是实例化我们库的构造函数，这些对象将会封装我们选择或创建的元素。</p>
+
+<p>
+    　　接下来我们创建了dome对象，它是我们实际的库对象；你能看到，它在最后被返回。它有一个空的get函数，我们将用它来从页面中选择元素。所以，让我们现在来填充它的代码。</p>
+<hr>
+<h2>
+    　步骤2: 获取元素</h2>
+
+<p>
+    　　dome.get函数传入一个参数，但是它可以有好几种情况。如果它是一个字符串，我们假定它是一个CSS选择器；但是我们也可以传入单个DOM节点或是一个NodeList。</p>
+
+<div>
+    <div id="highlighter_477275" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">get: </code><code
+                                class="jscript keyword">function</code> <code class="jscript plain">(selector) {</code>
+                        </div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">els;</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">typeof</code> <code class="jscript plain">selector
+                            === </code><code class="jscript string">"string"</code><code class="jscript plain">)
+                            {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">els = document.querySelectorAll(selector);</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript keyword">if</code> <code class="jscript plain">(selector.length) {</code>
+                        </div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">els = selector;</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">els = [selector];</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">new</code> <code
+                                class="jscript plain">Dome(els);</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript plain">}</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　我们使用document.querySelectorAll来简化元素的查找：当然这有浏览器兼容性问题，但是对于我们的例子来说它是ok的。如果selector不是字符串，我们将检查它的length属性。如果它存在，我们就知道它是一个NodeList；否则它是单个元素然后我们将它放到一个数组中。这就是我们下面需要将调用Dome的结果传给一个数组的原因；你可以看到我们返回一个新的Dome对象。所以让我们回头看看Dome函数并填充它。</p>
+<hr>
+<h2>
+    　步骤3: 创建Dome实例</h2>
+
+<p>
+    　　下面是Dome函数：</p>
+
+<div>
+    <div id="highlighter_151826" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript keyword">function</code> <code
+                                class="jscript plain">Dome (els) {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">for</code><code class="jscript plain">(</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">i = 0; i &lt; els.length;
+                            i++ ) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">this</code><code class="jscript plain">[i] = els[i];</code>
+                        </div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">this</code><code class="jscript plain">.length =
+                            els.length;</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript plain">}</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　它确实很简单：我们只是遍历我们选择的元素并把它们附到带有数字索引的新对象中。然后我们添加一个length属性。</p>
+
+<p>
+    　　但是这的关键是什么呢？为什么不直接返回元素？我们将元素封装到一个对象因为我们想为这个对象创建方法；这些方法可以让我们与这些元素交互。这实际上就是jQuery采用的方法的简化版本。</p>
+
+<p>
+    　　所以，我们返回了Dome对象，让我们在它的原型上添加一些方法。我把这些方法直接写在Dome函数中。</p>
+<hr>
+<h2>
+    　步骤4: 添加一些常用工具函数</h2>
+
+<p>
+    　　我们要写的第一个方法是一个简单的工具函数。因为我们的Dome对象可以封装多个DOM元素，几乎每个方法都需要遍历每个元素；所以，这些工具函数会非常便利。</p>
+
+<p>
+    　　让我们以一个map函数开始：</p>
+
+<div>
+    <div id="highlighter_682007" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.map
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(callback)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">results = [], i =
+                            0;</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">for</code> <code class="jscript plain">( ; i &lt; </code><code
+                                class="jscript keyword">this</code><code class="jscript plain">.length; i++) {</code>
+                        </div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">results.push(callback.call(</code><code class="jscript keyword">this</code><code
+                                class="jscript plain">, </code><code class="jscript keyword">this</code><code
+                                class="jscript plain">[i], i));</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">results;</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　当然，map函数传入单个参数，一个回调函数。我们遍历数组中的每一项，收集回调函数返回的所有内容放到results数组中。注意我们如何调用回调函数：</p>
+
+<div>
+    <div id="highlighter_840632" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">callback.call(</code><code
+                                class="jscript keyword">this</code><code class="jscript plain">, </code><code
+                                class="jscript keyword">this</code><code class="jscript plain">[i], i));</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　这样函数就会在我们的Dome实例的上下文中被调用，它接受两个参数：当前元素，以及索引号。</p>
+
+<p>
+    　　我们也想要一个forEach函数。它确实非常简单：</p>
+
+<div>
+    <div id="highlighter_226358" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.forEach(callback)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">this</code><code class="jscript plain">.map(callback);</code>
+                        </div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">;</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　map和forEach间的唯一区别是map需要返回一些东西，因此我们也可以只传入我们的回调函数给this.map并忽略返回的数组，我们将返回this来使得我们的库支持链式操作。我们将经常使用forEach。所以，注意当返回我们的this.forEach对函数的调用时，我们事实上是返回了this。例如，下面的方法实际上返回相同的东西：</p>
+
+<div>
+    <div id="highlighter_607743" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.someMethod1
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(callback)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(callback);</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">;</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript plain">};</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript plain">Dome.prototype.someMethod2
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(callback)
+                            {</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(callback);</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　另外：mapOne。很容易看出这个函数是干什么的，但是问题是为什么我们需要它？它需要一些你可以叫做“库哲学”的东西来解释。</p>
+
+<h3>
+    　一个简单的“哲学的”迂回</h3>
+
+<p>
+    　　如果创建一个库只是写代码，那就不是什么难的工作了。但是我正在做这个项目，我发现困难的部分是决定一些方法应该如何工作。</p>
+
+<p>
+    　　很快，我们将建一个text方法，它返回我们选择元素的文本。如果我们的Dome对象封装几个DOM节点（如dome.get("li")），它会返回什么呢？如果你在jQuery做类似的事情（$("li").text()），你将会得到一个所有元素的文本拼起来的字符串。它有用吗？我认为没用，但是我不知道更好的返回是什么。</p>
+
+<p>
+    　　在这个项目中，我将以数组形式返回多个元素的文本，除非数组中只有一个元素，那我们就返回一个文本字符串，而不是只有一个元素的数组。我想你最常用的是获取单个元素的文本，所以我们对这个情况进行优化。然而，如果你获取多个元素的文本，我们也会返回一些你能操作的东西。</p>
+
+<h3>
+    　回到代码</h3>
+
+<p>
+    　　所以，mapOne方法只是简单的运行map，然后要么返回数组，要么返回单元素数组中的元素。如果你还是不确定这有什么用，等一会你会发现的！</p>
+
+<div>
+    <div id="highlighter_746726" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.mapOne
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(callback)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">m = </code><code
+                                class="jscript keyword">this</code><code class="jscript plain">.map(callback);</code>
+                        </div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">m.length &gt; 1 ? m :
+                            m[0];</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr>
+<h2>
+    　步骤5: 处理文本和HTML</h2>
+
+<p>
+    　　接下来，让我们添加text方法。就像jQuery一样，我们可以给它传入一个字符串并设置元素的文本，或不传参数来获取元素的文本。</p>
+
+<div>
+    <div id="highlighter_857877" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.text
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(text)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">typeof</code> <code class="jscript plain">text !== </code><code
+                                class="jscript string">"undefined"</code><code class="jscript plain">) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.innerText = text;</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.mapOne(</code><code class="jscript keyword">function</code> <code
+                                class="jscript plain">(el) {</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">el.innerText;</code>
+                        </div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div>
+    <div id="highlighter_159595" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.text
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(text)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">typeof</code> <code class="jscript plain">text !== </code><code
+                                class="jscript string">"undefined"</code><code class="jscript plain">) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.innerText = text;</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.mapOne(</code><code class="jscript keyword">function</code> <code
+                                class="jscript plain">(el) {</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">el.innerText;</code>
+                        </div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　你可能也想到了，我们需要检查text的值来看它是要设置还是要获取。注意如果只是用if(text)会有问题，因为空字符串会被判断为false。</p>
+
+<p>
+    　　如果我们在设置值，我们将对元素调用forEach并且设置它们的innerText属性为text。如果我们要获取，我们将返回元素的
+    innerText属性。注意我们使用mapOne方法：如果我们在处理多个元素，它将返回一个数组，否则它将就是一个字符串。</p>
+
+<p>
+    　　html方法几乎与text一样，除了它使用innerHTML属性而不是innerText。</p>
+
+<div>
+    <div id="highlighter_751965" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                    <div class="line number12 index11 alt1">12</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.html
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(html)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">typeof</code> <code class="jscript plain">html !== </code><code
+                                class="jscript string">"undefined"</code><code class="jscript plain">) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">this</code><code class="jscript plain">.forEach(</code><code
+                                class="jscript keyword">function</code> <code class="jscript plain">(el) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.innerHTML = html;</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">;</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.mapOne(</code><code class="jscript keyword">function</code> <code
+                                class="jscript plain">(el) {</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">el.innerHTML;</code>
+                        </div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number12 index11 alt1"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　就像我说的：几乎完全一样。</p>
+<hr>
+<h2>
+    　步骤6: 调整样式</h2>
+
+<p>
+    　　再接下来，我们希望能添加和删除样式，因此让我们来写一个addClass和removeClass方法。</p>
+
+<p>
+    　　我们的addClass方法将接收一个字符串或是样式名称的数组。为了做到这点，我们需要检查参数的类型。如果是数组，我们将遍历它并创建一个样式名的字符串。否则，我们就简单的在样式名前加一个空格，这样它就不会和元素已有的样式混在一些。然后我们遍历元素并且将新的样式附加到className属性后面。</p>
+
+<div>
+    <div id="highlighter_430699" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                    <div class="line number12 index11 alt1">12</div>
+                    <div class="line number13 index12 alt2">13</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.addClass
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(classes)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">className = </code><code
+                                class="jscript string">""</code><code class="jscript plain">;</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">typeof</code> <code class="jscript plain">classes
+                            !== </code><code class="jscript string">"string"</code><code class="jscript plain">)
+                            {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">for</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">i = 0; i &lt;
+                            classes.length; i++) {</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">className += </code><code class="jscript string">" "</code> <code
+                                class="jscript plain">+ classes[i];</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">className = </code><code class="jscript string">" "</code> <code
+                                class="jscript plain">+ classes;</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.className += className;</code></div>
+                        <div class="line number12 index11 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number13 index12 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　很直接，对吗？</p>
+
+<p>
+    　　那如何删除样式呢？为了保持简单，我们只允许一次删除一个样式。</p>
+
+<div>
+    <div id="highlighter_242598" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.removeClass
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(clazz)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">cs =
+                            el.className.split(</code><code class="jscript string">" "</code><code
+                                class="jscript plain">), i;</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">while</code> <code class="jscript plain">( (i =
+                            cs.indexOf(clazz)) &gt; -1) {</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">cs = cs.slice(0, i).concat(cs.slice(++i));</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.className = cs.join(</code><code class="jscript string">"
+                            "</code><code class="jscript plain">);</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　对每个元素，我们将el.className分隔成一个数组。然后，我们使用一个while循环来剔除我们传入的样式，直到cs.indexOf(clazz)返回-1。我们这样做是为了处理同样的样式在一个元素中出现的不止一次的特殊情况：我们必须保证它真的被删除了。一旦我们确保删除每个样式的实例，我们用空格连接数组的每一项并把它设置到el.className。</p>
+<hr>
+<h2>
+    　步骤7: 修正一个IE的Bug</h2>
+
+<p>
+    　　我们正在处理的最糟糕的浏览器是IE8。在我们的小小的库中，只有一个IE bug需要我们处理，很幸运它很简单。IE8不支持Array的indexOf方法；我们在removeClass中使用到它，所以让我们修复它：</p>
+
+<div>
+    <div id="highlighter_424690" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript keyword">if</code> <code
+                                class="jscript plain">(</code><code class="jscript keyword">typeof</code> <code
+                                class="jscript plain">Array.prototype.indexOf !== </code><code class="jscript string">"function"</code><code
+                                class="jscript plain">) {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">Array.prototype.indexOf = </code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(item) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">for</code><code class="jscript plain">(</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">i = 0; i
+                            &lt; </code><code class="jscript keyword">this</code><code class="jscript plain">.length;
+                            i++) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">this</code><code class="jscript plain">[i] === item) {</code>
+                        </div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">i;</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">-1;</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript plain">}</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　它非常简单，并且这不是一个完全的实现（不支持第二个参数），但是能达到我们的目的。</p>
+<hr>
+<h2>
+    　步骤8: 调节属性</h2>
+
+<p>
+    　　现在，我们想要一个attr函数。这很容易，因为它与我们的text或html方法非常类似。像那些方法一样，我们能够获取或设置属性值：我们可以传入元素名和值来设置，也可以只传入属性名来获取。</p>
+
+<div>
+    <div id="highlighter_913109" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.attr
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(attr,
+                            val) {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">typeof</code> <code class="jscript plain">val !== </code><code
+                                class="jscript string">"undefined"</code><code class="jscript plain">) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code><code
+                                class="jscript plain">(el) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.setAttribute(attr, val);</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.mapOne(</code><code class="jscript keyword">function</code> <code
+                                class="jscript plain">(el) {</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code
+                                class="jscript plain">el.getAttribute(attr);</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　如果val有一个值，我们将遍历这些元素并且将选择的属性设置为这个值，使用元素的setAttribute方法。否则，我们使用mapOne通过getAttribute方法来返回属性值。</p>
+<hr>
+<h2>
+    　步骤9: 创建元素</h2>
+
+<p>
+    　　像很多好的库一样，我们应该能够创建新的元素。当然它作为一个Dome实例的一个方法不是很好，所以让我们直接把它挂到dome对象上去。</p>
+
+<div>
+    <div id="highlighter_115797" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript keyword">var</code> <code
+                                class="jscript plain">dome = {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript comments">// get method here</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">create: </code><code class="jscript keyword">function</code> <code
+                                class="jscript plain">(tagName, attrs) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　你已经看到，我们使用两个参数：元素的名字，和属性值对象。大部分属性能过attr方法赋值，但是两种方法可以做特殊处理。我们使用addClass方法操作className属性，以及text方法操作text属性。当然，我们首先需要创建元素和Dome对象。下面是整个操作的代码：</p>
+
+<div>
+    <div id="highlighter_956166" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                    <div class="line number12 index11 alt1">12</div>
+                    <div class="line number13 index12 alt2">13</div>
+                    <div class="line number14 index13 alt1">14</div>
+                    <div class="line number15 index14 alt2">15</div>
+                    <div class="line number16 index15 alt1">16</div>
+                    <div class="line number17 index16 alt2">17</div>
+                    <div class="line number18 index17 alt1">18</div>
+                    <div class="line number19 index18 alt2">19</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">create: </code><code
+                                class="jscript keyword">function</code> <code class="jscript plain">(tagName, attrs)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">el = </code><code
+                                class="jscript keyword">new</code> <code class="jscript plain">Dome([document.createElement(tagName)]);</code>
+                        </div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(attrs) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(attrs.className) {</code>
+                        </div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.addClass(attrs.className);</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">delete</code> <code
+                                class="jscript plain">attrs.className;</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(attrs.text) {</code>
+                        </div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.text(attrs.text);</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">delete</code> <code class="jscript plain">attrs.text;</code>
+                        </div>
+                        <div class="line number11 index10 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number12 index11 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">for</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">key </code><code
+                                class="jscript keyword">in</code> <code class="jscript plain">attrs) {</code></div>
+                        <div class="line number13 index12 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(attrs.hasOwnProperty(key))
+                            {</code></div>
+                        <div class="line number14 index13 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.attr(key, attrs[key]);</code></div>
+                        <div class="line number15 index14 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number16 index15 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number17 index16 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number18 index17 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">el;</code></div>
+                        <div class="line number19 index18 alt2"><code class="jscript plain">}</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　我们创建元素并将它传给一个新的Dome对象。然后中我们处理属性。注意在操作完它们后我们必须删除className和text属性。这样可以避免当我们在attrs中遍历剩下的key值时被应用为属性。当然我们最后要返回这个新建的Dome对象。</p>
+
+<p>
+    　　但是现在只是创建了新的元素，我们希望把它插入到DOM中对吗？</p>
+<hr>
+<h2>
+    　步骤10: 附加元素</h2>
+
+<p>
+    　　下一步，我们将写append和prepend方法。这些确实是有点难搞的函数，主要是因为有很多种使用情况。以下是我们希望能做到的：</p>
+
+<div>
+    <div id="highlighter_567464" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">dome1.append(dome2);</code>
+                        </div>
+                        <div class="line number2 index1 alt1"><code class="jscript plain">dome1.prepend(dome2);</code>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　使用情况如下：我们可能想要append或prepend</p>
+<ul>
+    <li>
+        <p>
+            一个新的元素到一个或多个已存在的元素</p>
+    </li>
+    <li>
+        <p>
+            多个新元素到一个或多个已存在的元素</p>
+    </li>
+    <li>
+        <p>
+            一个已存在的元素到一个或多个已存在的元素</p>
+    </li>
+    <li>
+        <p>
+            多个已存在的元素到一个或多个已存在的元素</p>
+    </li>
+</ul>
+<p>
+    　　注意：我使用“新”来表示元素还没有在DOM中；已存在的元素是已经在DOM中有的。</p>
+
+<p>
+    　　让我们一步一步来：</p>
+
+<div>
+    <div id="highlighter_503799" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.append
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(els)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">this</code><code class="jscript plain">.forEach(</code><code
+                                class="jscript keyword">function</code> <code class="jscript plain">(parEl, i) {</code>
+                        </div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">els.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(childEl) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　我们期望els参数是一个Dome对象。一个完整的DOM库可以接受一个节点或nodelist作为参数，但是我们暂时不这样做。我们必须遍历我们每一个元素，并且在它里面，我们还要遍历每个我们需要append的元素。</p>
+
+<p>
+    　　如果我们将els到多个元素，我们需要克隆它们。然而，我们不想在他们第一次被附加的时候克隆节点，而时随后再说。所以我们这样：</p>
+
+<div>
+    <div id="highlighter_488047" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript keyword">if</code> <code
+                                class="jscript plain">(i &gt; 0) {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">childEl = childEl.cloneNode(</code><code class="jscript keyword">true</code><code
+                                class="jscript plain">);</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript plain">}</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　这个i来自外层的forEach循环：它是当前父元素的索引。如果我们不是附加到第一个父元素，我们将克隆节点。这样，真正的节点将会放到第一个父节点中，其它父节点将获得一个拷贝。这样很好用，因为传入的Dome对象将只会拥有原始的节点。所以如果我们只是附加单个元素到单个元素，使用的所有节点都将是各自Dome对象的一部分。</p>
+
+<p>
+    　　最后，我们终于可以附加元素：</p>
+
+<div>
+    <div id="highlighter_357074" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code
+                                class="jscript plain">parEl.appendChild(childEl);</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　所以，汇总起来是这样</p>
+
+<div>
+    <div id="highlighter_679229" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.append
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(els)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(parEl, i) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">els.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(childEl) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(i &gt; 0) {</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">childEl = childEl.cloneNode(</code><code class="jscript keyword">true</code><code
+                                class="jscript plain">);</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">parEl.appendChild(childEl);</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<h3>
+    <code>　prepend</code>方法</h3>
+
+<p>
+    　　我们想要prepend方法也满足同样的情况，所以这个方法非常类似：</p>
+
+<div>
+    <div id="highlighter_757214" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.prepend
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">(els)
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(parEl, i) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">for</code> <code class="jscript plain">(</code><code
+                                class="jscript keyword">var</code> <code class="jscript plain">j = els.length -1; j &gt;
+                            -1; j--) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">childEl = (i &gt; 0) ? els[j].cloneNode(</code><code
+                                class="jscript keyword">true</code><code class="jscript plain">) : els[j];</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">parEl.insertBefore(childEl, parEl.firstChild);</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　当prepend时所不同的是如果你顺次prepend一系列元素到另外一个元素时，它们是倒序的。因为我们不能反向forEach，我将使用for循环反向遍历。同样，我们将克隆节点如果它不是我们第一个要附件到的父节点。</p>
+<hr>
+<h2>
+    　步骤11: 移除节点</h2>
+
+<p>
+    　　对于我们最后一个节点处理方法，我们想要从DOM中删除节点。其实很简单：</p>
+
+<div>
+    <div id="highlighter_75993" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.remove
+                            = </code><code class="jscript keyword">function</code> <code class="jscript plain">()
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript plain">el.parentNode.removeChild(el);</code>
+                        </div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript plain">};</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　就是遍历节点并在每个元素的parentNode上调用removeChild方法。这里漂亮的地方在于这个Dome对象还将正常工作；我们可以在它上面使用任何方法，包括重新放回到DOM中去。</p>
+<hr>
+<h2>
+    　步骤12: 处理事件</h2>
+
+<p>
+    　　最后，但是肯定不是用得最少的，我们将写一些函数处理事件。你可以知道，IE8使用老式的IE事件，所以我们需要检查它。同时，我们将抛出DOM 0事件，就因为我们可以。</p>
+
+<p>
+    签出方法，然后中我们将讨论它：</p>
+
+<div>
+    <div id="highlighter_273279" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                    <div class="line number12 index11 alt1">12</div>
+                    <div class="line number13 index12 alt2">13</div>
+                    <div class="line number14 index13 alt1">14</div>
+                    <div class="line number15 index14 alt2">15</div>
+                    <div class="line number16 index15 alt1">16</div>
+                    <div class="line number17 index16 alt2">17</div>
+                    <div class="line number18 index17 alt1">18</div>
+                    <div class="line number19 index18 alt2">19</div>
+                    <div class="line number20 index19 alt1">20</div>
+                    <div class="line number21 index20 alt2">21</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.on =
+                            (</code><code class="jscript keyword">function</code> <code class="jscript plain">()
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(document.addEventListener)
+                            {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">function</code>
+                            <code class="jscript plain">(evt, fn) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.addEventListener(evt, fn, </code><code class="jscript keyword">false</code><code
+                                class="jscript plain">);</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript keyword">if</code> <code class="jscript plain">(document.attachEvent)&nbsp;
+                            {</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">function</code>
+                            <code class="jscript plain">(evt, fn) {</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.attachEvent(</code><code class="jscript string">"on"</code>
+                            <code class="jscript plain">+ evt, fn);</code></div>
+                        <div class="line number12 index11 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number13 index12 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number14 index13 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number15 index14 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">function</code>
+                            <code class="jscript plain">(evt, fn) {</code></div>
+                        <div class="line number16 index15 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number17 index16 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el[</code><code class="jscript string">"on"</code> <code
+                                class="jscript plain">+ evt] = fn;</code></div>
+                        <div class="line number18 index17 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number19 index18 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number20 index19 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number21 index20 alt2"><code class="jscript plain">}());</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<p>
+    　　在这，我们使用了一个立即执行函数表达式，在函数里面我们做了特征检查。如果document.addEventListener存在，我们将使用它；否则我们检查document.attachEvent或者求助于DOM
+    0事件。注意我们如何返回最后的函数：它将在结束时被赋给Dome.prototype.on。当做特征检测时，非常方便地像这样赋给合适的函数，而不是每次函数运行时都得检查一次。</p>
+
+<p>
+    　　off函数用于卸载事件，它与前面非常类似。</p>
+
+<div>
+    <div id="highlighter_710314" class="syntaxhighlighter  jscript">
+        <div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div>
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+                <td class="gutter">
+                    <div class="line number1 index0 alt2">1</div>
+                    <div class="line number2 index1 alt1">2</div>
+                    <div class="line number3 index2 alt2">3</div>
+                    <div class="line number4 index3 alt1">4</div>
+                    <div class="line number5 index4 alt2">5</div>
+                    <div class="line number6 index5 alt1">6</div>
+                    <div class="line number7 index6 alt2">7</div>
+                    <div class="line number8 index7 alt1">8</div>
+                    <div class="line number9 index8 alt2">9</div>
+                    <div class="line number10 index9 alt1">10</div>
+                    <div class="line number11 index10 alt2">11</div>
+                    <div class="line number12 index11 alt1">12</div>
+                    <div class="line number13 index12 alt2">13</div>
+                    <div class="line number14 index13 alt1">14</div>
+                    <div class="line number15 index14 alt2">15</div>
+                    <div class="line number16 index15 alt1">16</div>
+                    <div class="line number17 index16 alt2">17</div>
+                    <div class="line number18 index17 alt1">18</div>
+                    <div class="line number19 index18 alt2">19</div>
+                    <div class="line number20 index19 alt1">20</div>
+                    <div class="line number21 index20 alt2">21</div>
+                </td>
+                <td class="code">
+                    <div class="container">
+                        <div class="line number1 index0 alt2"><code class="jscript plain">Dome.prototype.off =
+                            (</code><code class="jscript keyword">function</code> <code class="jscript plain">()
+                            {</code></div>
+                        <div class="line number2 index1 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">if</code> <code class="jscript plain">(document.removeEventListener)
+                            {</code></div>
+                        <div class="line number3 index2 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">function</code>
+                            <code class="jscript plain">(evt, fn) {</code></div>
+                        <div class="line number4 index3 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number5 index4 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.removeEventListener(evt, fn, </code><code
+                                class="jscript keyword">false</code><code class="jscript plain">);</code></div>
+                        <div class="line number6 index5 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number7 index6 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number8 index7 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript keyword">if</code> <code class="jscript plain">(document.detachEvent)&nbsp;
+                            {</code></div>
+                        <div class="line number9 index8 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">function</code>
+                            <code class="jscript plain">(evt, fn) {</code></div>
+                        <div class="line number10 index9 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number11 index10 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el.detachEvent(</code><code class="jscript string">"on"</code>
+                            <code class="jscript plain">+ evt, fn);</code></div>
+                        <div class="line number12 index11 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number13 index12 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number14 index13 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">} </code><code class="jscript keyword">else</code> <code
+                                class="jscript plain">{</code></div>
+                        <div class="line number15 index14 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">function</code>
+                            <code class="jscript plain">(evt, fn) {</code></div>
+                        <div class="line number16 index15 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript keyword">return</code> <code class="jscript keyword">this</code><code
+                                class="jscript plain">.forEach(</code><code class="jscript keyword">function</code>
+                            <code class="jscript plain">(el) {</code></div>
+                        <div class="line number17 index16 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">el[</code><code class="jscript string">"on"</code> <code
+                                class="jscript plain">+ evt] = </code><code class="jscript keyword">null</code><code
+                                class="jscript plain">;</code></div>
+                        <div class="line number18 index17 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">});</code></div>
+                        <div class="line number19 index18 alt2"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">};</code></div>
+                        <div class="line number20 index19 alt1"><code class="jscript spaces">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><code
+                                class="jscript plain">}</code></div>
+                        <div class="line number21 index20 alt2"><code class="jscript plain">}());</code></div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<hr>
+<h2>
+    　就是这样！</h2>
+
+<p>
+    　　我希望你能试一试我们的小小的库，并且能稍稍扩展一点点。就像我之前是提到的一样，我把它放到Github上了。可以免费fork，玩一玩，并且发送一个pull请求。</p>
+
+<p>
+    　　让我再申明一下，这个教程的目的不是说建议你总是要写一个自己的库。</p>
+
+<p>
+    　　有专业的团队在做一个庞大的，稳定的越来越好的库。这里我们只是想让大家看看一个库内部是什么样子的，希望你能在这学到一些东西。</p>
+
+<p>
+    原文链接：<a href="http://net.tutsplus.com/tutorials/javascript-ajax/build-your-first-javascript-library/"
+            target="_blank" title="Build Your First JavaScript Library">Build Your First JavaScript Library</a></p>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<script language="javascript">
+    console.log("test");
+    lh.get(".test");
+    lh.markPage("#documentPage");
+//    $(function () {
+//        $("#documentPage").mouseup(function (e) {
+//            var x = 10;
+//            var y = 10;
+//            var r = "";
+//            if (document.selection) {
+//                r = document.selection.createRange().text;
+//            }
+//            else if (window.getSelection()) {
+//                r = window.getSelection();
+//            }
+//            if (r!= "") {
+//                var bowen = "发送到新浪微博";
+//                var tooltip = "<div id='tooltip' class='tooltip'><a onclick=alert('"+r+"')>" + bowen + "</a></div>";
+//                $("body").append(tooltip);
+//                $("#tooltip").css({
+//                    "top": (e.pageY + y) + "px",
+//                    "left": (e.pageX + x) + "px",
+//                    "position": "absolute",
+//                    "background-color":"green"
+//                }).show("fast");
+//            }
+//        }).mousedown(function () {
+//            $("#tooltip").remove();
+//        });
+//    })
+
+    function ask(r) {
+        if (r != "") {
+            window.open('http://v.t.sina.com.cn/share/share.php?searchPic=false&title='+r+'&url=http://www.cnblogs.com/durongjian&source=天行健，自强不息&sourceUrl=http%3A%2F%2Fblog.sina.com.cn&content=utf-8&appkey=1617465124', '_blank', 'height=515, width=598, toolbar=no, menubar=no, scrollbars=auto, resizable=yes, location=no, status=yes');
+        }
+    }
+</script>
+</body>
+</html>
